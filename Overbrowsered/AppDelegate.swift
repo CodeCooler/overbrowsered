@@ -74,7 +74,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 	public func menuNeedsUpdate(_ menu: NSMenu) {
 		menu.removeAllItems()
 		
-		menu.addItem(withTitle: "Overbrowsered by @bmisiak", action: nil, keyEquivalent: "")
+		menu.addItem(withTitle: "Overbrowsered by @bmisiak (modded by CC)", action: nil, keyEquivalent: "")
 		menu.addItem(NSMenuItem.separator())
 		
 		menu.addItem(withTitle: "Most recently used browser: \(self.mostRecentlyUsedBrowser?.infoDictionary?["CFBundleName"] as? String ?? "Unknown (use any browser to detect)")", action: nil, keyEquivalent: "")
@@ -131,6 +131,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 			return
 		}
 		
+        
 		let appIsABrowser =
 			(appBundle.infoDictionary?["CFBundleURLTypes"] as? [[String:Any?]])?
 			.map { urlType in urlType["CFBundleURLSchemes"] as? [String?] }
@@ -138,8 +139,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 				schemes?.contains { scheme in scheme == "http" || scheme == "https" } ?? false
 			}
 			?? false
-		
-		if appIsABrowser {
+
+		let appName = "\(appBundle.infoDictionary?["CFBundleName"]! ?? "")".lowercased()
+
+
+
+
+		if appIsABrowser
+            && appName.compare("couch") != .orderedSame
+            && appName.compare("couchdb") != .orderedSame
+            && appName.compare("mattermost") != .orderedSame
+            && appName.compare("iterm2") != .orderedSame
+            && appName.compare("iterm") != .orderedSame
+        {
 			self.mostRecentlyUsedBrowser = appBundle
 		}
 	}
